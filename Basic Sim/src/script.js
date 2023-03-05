@@ -1,9 +1,9 @@
 import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 
-import model from './model.glb'
+import { Agent } from './Agent.js'
+
 /**
  * Base
  */
@@ -12,7 +12,7 @@ const canvas = document.querySelector('canvas.webgl')
 
 // Scene
 const scene = new THREE.Scene();
-let animationMixer;
+let agent; let lights = []; 
 // Add the plane, lights, and the model in the scene. 
 setupStage();
 
@@ -63,8 +63,8 @@ const tick = () =>
 {
     // update animation mixer;
     const delta = clock.getDelta();
-    if (animationMixer) {
-        animationMixer.update(delta);
+    if (agent) {
+        agent.update(delta, lights);
     }
 
     // Update controls
@@ -87,9 +87,7 @@ function setupStage() {
     createFloor();
     createLights();
     createAmbiance();
-
-    // Load the model and play the animation.
-    loadModel(); 
+    createModel(); 
 }
 
 function createAmbiance() {
@@ -102,19 +100,8 @@ function createAmbiance() {
     scene.add(directionalLight);	
 }
 
-function loadModel() {
-    console.log('Loading Model');
-    const gltfLoader = new GLTFLoader();
-    let dancer, dancerAnimation;
-    gltfLoader.load(model, gltf => {
-        dancer = new THREE.Group();
-        dancer.add(gltf.scene); 
-        dancerAnimation = gltf.animations[0];
-        animationMixer = new THREE.AnimationMixer(dancer);
-        const action = animationMixer.clipAction(dancerAnimation);
-        action.play();
-        scene.add(dancer);
-    });
+function createModel() {
+    agent = new Agent(scene);
 }
 
 function createFloor() {
@@ -134,7 +121,7 @@ function createLights() {
     // Prepare the cyclinder mesh for the light
     // Base Top, Base Ground, Height
     const geometry = new THREE.CylinderGeometry(0.2, 0.2, 2.0);
-    const material = new THREE.MeshBasicMaterial({ color: 0x000000, wireframe: false });
+    const material = new THREE.MeshBasicMaterial({ color: 'black', wireframe: false });
     const mesh = new THREE.Mesh(geometry, material);
     mesh.scale.set(0.2, 1.0, 0.2);
     mesh.position.set(0., 1.0, 0); // Places the light at 0
@@ -153,5 +140,7 @@ function createLights() {
 
         // Add it to the scene.
         scene.add(light);
+
+        lights.push(light);
     }
 }
