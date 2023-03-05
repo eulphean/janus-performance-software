@@ -127,15 +127,15 @@ function createLights() {
     mesh.position.set(0., 1.0, 0); // Places the light at 0
 
     // Push the lights in the scene.
-    const theta = 2 * Math.PI/24; 
+    const theta = 1.75 * Math.PI/24; 
     const radius = 4.0; 
     for (let i = 0; i < 24; i++) {
         // Clone the mesh as a light.
         const light = mesh.clone(true);
 
         // Set this mesh's position.
-        const x = radius * Math.cos(theta * i);
-        const z = radius * Math.sin(theta * i);
+        const x = radius * Math.cos(theta * (i + 9));
+        const z = radius * Math.sin(theta * (i + 9));
         light.position.set(x, 1.0, z);
 
         // Add it to the scene.
