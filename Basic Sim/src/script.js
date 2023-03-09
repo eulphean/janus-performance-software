@@ -13,6 +13,7 @@ const canvas = document.querySelector('canvas.webgl')
 // Scene
 const scene = new THREE.Scene();
 let agent; let lights = []; 
+let debug = false; 
 // Add the plane, lights, and the model in the scene. 
 setupStage();
 
@@ -21,6 +22,10 @@ const sizes = {
     width: window.innerWidth,
     height: window.innerHeight
 }
+
+window.addEventListener('keypress', () => {
+    debug = !debug;
+})
 
 window.addEventListener('resize', () =>
 {
@@ -64,7 +69,7 @@ const tick = () =>
     // update animation mixer;
     const delta = clock.getDelta();
     if (agent) {
-        agent.update(delta, lights);
+        agent.update(delta, lights, debug);
     }
 
     // Update controls

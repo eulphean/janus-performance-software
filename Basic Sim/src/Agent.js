@@ -47,9 +47,15 @@ export class Agent {
         });
     }
 
-    update(delta, lights) {
+    update(delta, lights, debug) {
         if (this.animationMixer) {
-            this.animationMixer.update(delta);
+            this.animationMixer.update(delta * 0.25);
+        }
+
+        if (debug) {
+            this.posMesh.visible = false;
+        } else {
+            this.posMesh.visible = true;
         }
 
         const headPos = this.head.position;
