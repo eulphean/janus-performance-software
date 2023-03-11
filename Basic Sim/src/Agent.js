@@ -1,4 +1,4 @@
-import model from './model.glb'
+import model from '../assets/model.glb'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import * as THREE from 'three'
 import { SphereGeometry } from 'three';
@@ -47,7 +47,7 @@ export class Agent {
         });
     }
 
-    update(delta, lights, debug) {
+    update(delta, debug, lights) {
         if (this.animationMixer) {
             this.animationMixer.update(delta * 0.25);
         }
@@ -70,6 +70,7 @@ export class Agent {
             this.raycaster.set(worldPos, this.worldForwardVector.normalize());
 
             // Intersect the objects
+            // Updates the lights
             if (lights) {
                 lights.forEach(l => {
                     const intersects = this.raycaster.intersectObject(l);
