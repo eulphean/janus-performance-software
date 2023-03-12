@@ -56,7 +56,7 @@ module.exports = {
 
             // Images
             {
-                test: /\.(jpg|png|gif|svg|glb)$/,
+                test: /\.(jpg|png|gif|svg|glb|hdr)$/,
                 use:
                 [
                     {

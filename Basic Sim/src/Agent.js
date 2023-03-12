@@ -28,16 +28,12 @@ export class Agent {
         gltfLoader.load(model, gltf => {
             this.dancer = new THREE.Group();
             this.dancer.add(gltf.scene); 
-            console.log(this.dancer);
             gltf.scene.traverse(child => {
-                // console.log(child.name);
                 if (child.name === 'mixamorigSpine') {
                     // I have found the head.
                     this.head = child;   
                 }
             });
-
-            console.log(this.head);
 
             const dancerAnimation = gltf.animations[0];
             this.animationMixer = new THREE.AnimationMixer(this.dancer);

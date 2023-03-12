@@ -1,14 +1,32 @@
 import * as THREE from 'three'
+import space from '../assets/space.glb'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 
 export class SetManager {
     constructor(scene) {
         console.log('Set Manager');
 
         this.scene = scene;
-        this.createFloor();
+        this.space = '';
+        // this.createFloor();
+        this.createSpace();
     }
 
     update() {
+
+    }
+
+    createSpace() {
+        // Import the model.
+        // Setup the materials for the space.
+        const gltfLoader = new GLTFLoader();
+        gltfLoader.load(space, gltf => {
+            this.space = gltf.scene;
+            this.space.scale.set(0.1, 0.1, 0.1);
+            this.space.enableShadows = true;
+            console.log(this.space);
+            this.scene.add(this.space);
+        });
 
     }
 
@@ -23,3 +41,12 @@ export class SetManager {
         this.scene.add(mesh);
     }
 }
+
+
+// gltf.scene.traverse(child => {
+//     // console.log(child.name);
+//     if (child.name === 'mixamorigSpine') {
+//         // I have found the head.
+//         this.head = child;   
+//     }
+// });
