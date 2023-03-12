@@ -69,19 +69,20 @@ export class Agent {
             // Updates the lights
             if (lights) {
                 lights.forEach(l => {
-                    const intersects = this.raycaster.intersectObject(l);
-                    if (intersects) {
-                        intersects.forEach(i => {
+                    const intersects = this.raycaster.intersectObject(l, true);
+                    intersects.forEach(i => { 
+                        if (i.object.material.name === 'Light') {
                             // Change the material to a random color. 
                             const newMat = i.object.material.clone();
-                            if (newMat.color.r === 1 && newMat.color.g === 1 && newMat.color.b === 1) {
-                                newMat.color.set('black');
-                            } else {
+                            if (newMat.color.r === 0 && newMat.color.g === 0 && newMat.color.b === 0) {
+                                console.log(i.object.material.uuid);
                                 newMat.color.set('white');
+                            } else {
+                                newMat.color.set('black');
                             }
                             i.object.material = newMat;
-                        });
-                    }
+                        }
+                    });
                 })
             }
         }
