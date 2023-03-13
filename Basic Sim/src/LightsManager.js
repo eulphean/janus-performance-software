@@ -2,7 +2,7 @@ import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 
 export const LIGHT_COLOR = new THREE.Color(0.25, 0.25, 0.25);
-const BASE_COLOR = new THREE.Color(0.05, 0.05, 0.05);
+const BASE_COLOR = new THREE.Color(0.1, 0.1, 0.1);
 // Push the lights in the scene.
 const THETA = 1.75 * Math.PI/24; 
 const INSTALL_RADIUS = 5.0; 
@@ -41,7 +41,7 @@ export class LightsManager {
 
         // Box base. 
         geometry = new THREE.BoxGeometry(1, 1, 1);
-        material = new THREE.MeshBasicMaterial({ color: BASE_COLOR, wireframe: false });
+        material = new THREE.MeshBasicMaterial({ color: BASE_COLOR, emissive: BASE_COLOR, wireframe: false });
         const baseMesh = new THREE.Mesh(geometry, material);
 
         for (let i = 0; i < 24; i++) {

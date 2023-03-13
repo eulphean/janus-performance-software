@@ -49,13 +49,15 @@ window.addEventListener('resize', () =>
 // Camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
 camera.lookAt(new THREE.Vector3(0, 0, 0));
-camera.position.z = 10;
-camera.position.y = 5;
+camera.position.z = 11.5;
+camera.position.y = 3;
 scene.add(camera)
 
 // Controls
 const controls = new OrbitControls(camera, canvas)
-controls.enableDamping = false
+controls.enableDamping = false 
+controls.autoRotate = true
+controls.autoRotateSpeed = 0.25
 
 // Renderer
 const renderer = new THREE.WebGLRenderer({

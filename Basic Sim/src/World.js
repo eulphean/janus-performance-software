@@ -48,17 +48,24 @@ export class World {
 
     createAmbiance() {
         var ambientLight = new THREE.AmbientLight(0xD7D3D3);
-        ambientLight.intensity = 0.075;
+        ambientLight.intensity = 0.2;
         var directionalLight = new THREE.DirectionalLight(0xffffff);
-        directionalLight.intensity = 0.20;
+        directionalLight.intensity = 0.5;
         directionalLight.position.set(35, 35, 35);
-       // this.scene.add( ambientLight );
-        //this.scene.add(directionalLight);	
+        //this.scene.add( ambientLight );
+        this.scene.add(directionalLight);	
 
-        const spotLight = new THREE.SpotLight( 0xffffff );
-        spotLight.position.set(0, 35, 0);
-        spotLight.intensity = (0.5);
-        spotLight.castShadow = true;
+        let spotLight = new THREE.SpotLight( 0xffffff );
+        // spotLight.position.set(0, 10, 0);
+        spotLight.intensity = (0.25);
+        // spotLight.castShadow = true;
+        spotLight.angle = Math.PI/8;
+        // this.scene.add(spotLight);
+
+        spotLight = spotLight.clone();
+        spotLight.position.set(0, 5, 18);
+        // spotLight.target(this.setManager.setup);
+        //spotLight.lookAt(new THREE.Vector3(0, 0, 2));
         this.scene.add(spotLight);
     }
 }

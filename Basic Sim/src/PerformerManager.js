@@ -18,23 +18,10 @@ export class PerformerManager {
         this.modelB = new Agent(scene, modelB, startPos, startRot);
 
         // Drawing a line between the two points.
-        // this.points = [];
-        // this.points.push(new THREE.Vector3(-2, 5, 0));
-        // this.points.push(new THREE.Vector3(2, 5, 0));
-        // this.lineGeometry = new THREE.BufferGeometry().setFromPoints(this.points);
-        // const lineMaterial = new THREE.LineBasicMaterial({
-        //     color: 0x0000ff,
-        //     linewidth: 2,
-        //     linecap: 'round',
-        //     linejoin: 'round'
-        // });
-        // const line = new THREE.Line(this.lineGeometry, lineMaterial);
-        // this.scene.add(line);
-
         // Drawing a box between the points. 
         this.geometry = new THREE.BoxGeometry(1, 0.35, 0.35);
         this.geometry.translate(-1/2, 0, 0);
-        const material = new THREE.MeshBasicMaterial( {color: 0x0} );
+        const material = new THREE.MeshBasicMaterial( {color: 0x0, emissive: 0x0 } );
         this.mesh = new THREE.Mesh(this.geometry, material );
         this.scene.add(this.mesh);
     }
