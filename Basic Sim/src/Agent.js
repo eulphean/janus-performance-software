@@ -7,6 +7,8 @@ import { LIGHT_COLOR } from './LightsManager';
 export class Agent {
     constructor(scene, modelPath, startPos, startRot) {
         console.log('Loading Model');
+        this.scene = scene; 
+
         const gltfLoader = new GLTFLoader();
         this.model = '';
         this.animationMixer = '';    
@@ -17,11 +19,12 @@ export class Agent {
         // Save the position of the head that we can use to attach 
         // our raycaster.
         this.head = '';
+        this.spine = '';
         const geometry = new SphereGeometry(1, 10, 10);
         const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
         this.posMesh = new THREE.Mesh(geometry, material);
         this.posMesh.scale.set(0.2, 0.2, 0.2);
-        scene.add(this.posMesh);
+        this.scene.add(this.posMesh);
 
         // Load model. 
         gltfLoader.load(modelPath, gltf => {
@@ -32,7 +35,11 @@ export class Agent {
             gltf.scene.traverse(child => {
                 if (child.name === 'mixamorigSpine') {
                     // I have found the head.
-                    this.head = child;   
+                    this.spine = child;   
+                }
+
+                if (child.name === 'mixamorigNeck') {
+                    this.head = child;
                 }
             });
 
@@ -41,7 +48,7 @@ export class Agent {
             const action = this.animationMixer.clipAction(animation);
             action.play();
             action.setLoop(THREE.LoopRepeat);
-            scene.add(this.model);
+            this.scene.add(this.model);
         });
     }
 
@@ -56,13 +63,15 @@ export class Agent {
             this.posMesh.visible = true;
         }
 
-        const headPos = this.head.position;
-        if (headPos) {
-            const worldPos = this.head.localToWorld(headPos);
+        // Clone the position so you don't modify the original.
+        // It's important else you'll see glitches.
+        if (this.spine) {
+            const spinePos = this.spine.position.clone();
+            const worldPos = this.spine.localToWorld(spinePos);
             this.posMesh.position.set(worldPos.x, worldPos.y, worldPos.z);
 
             // Get forward vector in the world
-            this.head.getWorldDirection(this.worldForwardVector);
+            this.spine.getWorldDirection(this.worldForwardVector);
 
             // Raycaster always pointing forward.
             this.raycaster.set(worldPos, this.worldForwardVector.normalize());

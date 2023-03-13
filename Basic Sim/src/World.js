@@ -28,11 +28,11 @@ export class World {
         this.createAmbiance();
     }
 
-    update(debug) {
+    update(debug, connect) {
         const delta = this.clock.getDelta();
 
         // Update all subsystems.
-        this.performerManager.update(delta, debug, this.lightsManager);
+        this.performerManager.update(delta, debug, connect, this.lightsManager);
         this.lightsManager.update();
         this.setManager.update();
     }

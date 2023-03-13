@@ -12,7 +12,8 @@ const canvas = document.querySelector('canvas.webgl')
 // Scene
 const scene = new THREE.Scene();
 let world = new World(scene);
-let debug = false;
+let debug = true;
+let connect = false;
 
 // Sizes
 const sizes = {
@@ -20,8 +21,14 @@ const sizes = {
     height: window.innerHeight
 }
 
-window.addEventListener('keypress', () => {
-    debug = !debug;
+window.addEventListener('keypress', (event) => {
+    if (event.key === 'd') {
+        debug = !debug;
+    }
+
+    if (event.key === 'c') {
+        connect = !connect;
+    }
 })
 
 window.addEventListener('resize', () =>
@@ -66,7 +73,7 @@ const tick = () =>
 {
     // Update the world.
     if (world) {
-        world.update(debug);
+        world.update(debug, connect);
     }
 
     // Update controls

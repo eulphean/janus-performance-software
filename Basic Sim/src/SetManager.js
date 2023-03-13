@@ -24,7 +24,6 @@ export class SetManager {
             this.space = gltf.scene;
             this.space.scale.set(0.1, 0.1, 0.1);
             this.space.enableShadows = true;
-            console.log(this.space);
             this.scene.add(this.space);
         });
 
