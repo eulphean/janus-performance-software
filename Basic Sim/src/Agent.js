@@ -45,7 +45,7 @@ export class Agent {
 
     update(delta, debug, lights) {
         if (this.animationMixer) {
-            this.animationMixer.update(delta * 0.25);
+            this.animationMixer.update(delta * 0.35);
         }
 
         if (debug) {
@@ -71,11 +71,9 @@ export class Agent {
                 lights.forEach(l => {
                     const intersects = this.raycaster.intersectObject(l, true);
                     intersects.forEach(i => { 
-                        if (i.object.material.name === 'Light') {
-                            // Change the material to a random color. 
+                        if (i.object.name === 'light') {
                             const newMat = i.object.material.clone();
-                            if (newMat.color.r === 0 && newMat.color.g === 0 && newMat.color.b === 0) {
-                                console.log(i.object.material.uuid);
+                            if (newMat.color.r === 0 && newMat.color.g === 0 & newMat.color.b === 0) {
                                 newMat.color.set('white');
                             } else {
                                 newMat.color.set('black');
