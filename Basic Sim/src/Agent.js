@@ -1,33 +1,34 @@
-import model from '../assets/model.glb'
+
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import * as THREE from 'three'
-import { SphereGeometry } from 'three';
+import { SphereGeometry, Vector3 } from 'three';
+import { LIGHT_COLOR } from './LightsManager';
 
 export class Agent {
-    constructor(scene) {
+    constructor(scene, modelPath, startPos, startRot) {
         console.log('Loading Model');
         const gltfLoader = new GLTFLoader();
-        this.dancer = '';
-        this.animationMixer = '';
+        this.model = '';
+        this.animationMixer = '';    
+        // Raycaster baby!
+        this.raycaster = new THREE.Raycaster();
+        this.worldForwardVector = new THREE.Vector3();
 
+        // Save the position of the head that we can use to attach 
+        // our raycaster.
+        this.head = '';
         const geometry = new SphereGeometry(1, 10, 10);
         const material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
         this.posMesh = new THREE.Mesh(geometry, material);
         this.posMesh.scale.set(0.2, 0.2, 0.2);
         scene.add(this.posMesh);
 
-        // Save the position of the head that we can use to attach 
-        // our raycaster.
-        this.head = '';
-
-        // Raycaster baby!
-        this.raycaster = new THREE.Raycaster();
-        this.worldForwardVector = new THREE.Vector3();
-
         // Load model. 
-        gltfLoader.load(model, gltf => {
-            this.dancer = new THREE.Group();
-            this.dancer.add(gltf.scene); 
+        gltfLoader.load(modelPath, gltf => {
+            this.model = new THREE.Group();
+            this.model.add(gltf.scene); 
+            this.model.rotateOnAxis(new Vector3(0, 1, 0), startRot);
+            this.model.position.set(startPos.x, startPos.y, startPos.z);
             gltf.scene.traverse(child => {
                 if (child.name === 'mixamorigSpine') {
                     // I have found the head.
@@ -35,17 +36,18 @@ export class Agent {
                 }
             });
 
-            const dancerAnimation = gltf.animations[0];
-            this.animationMixer = new THREE.AnimationMixer(this.dancer);
-            const action = this.animationMixer.clipAction(dancerAnimation);
+            const animation = gltf.animations[0];
+            this.animationMixer = new THREE.AnimationMixer(this.model);
+            const action = this.animationMixer.clipAction(animation);
             action.play();
-            scene.add(this.dancer);
+            action.setLoop(THREE.LoopRepeat);
+            scene.add(this.model);
         });
     }
 
-    update(delta, debug, lights) {
+    update(debug, delta, lights) {
         if (this.animationMixer) {
-            this.animationMixer.update(delta * 0.35);
+            this.animationMixer.update(delta);
         }
 
         if (debug) {
@@ -73,10 +75,10 @@ export class Agent {
                     intersects.forEach(i => { 
                         if (i.object.name === 'light') {
                             const newMat = i.object.material.clone();
-                            if (newMat.color.r === 0 && newMat.color.g === 0 & newMat.color.b === 0) {
+                            if (newMat.color.equals(LIGHT_COLOR)) {
                                 newMat.color.set('white');
                             } else {
-                                newMat.color.set('black');
+                                newMat.color.set(LIGHT_COLOR);
                             }
                             i.object.material = newMat;
                         }

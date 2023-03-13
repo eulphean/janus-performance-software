@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import space from '../assets/space.glb'
+import space from '../assets/models/space.glb'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 
 export class SetManager {

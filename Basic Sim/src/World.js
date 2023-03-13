@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
 
-import hdri from '../assets/dikhololo_night_1k.hdr'
+import hdri from '../assets/hdri/dikhololo_night_1k.hdr'
 import { PerformerManager } from "./PerformerManager"
 import { LightsManager } from "./LightsManager"
 import { SetManager } from "./SetManager"
