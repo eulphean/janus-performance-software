@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import space from '../assets/models/space.glb'
+import setup from '../assets/models/setup.glb'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 
 export class SetManager {
@@ -8,12 +9,18 @@ export class SetManager {
 
         this.scene = scene;
         this.space = '';
+
+        // Setup has an animation.
+        this.setup = '';
+        this.animationMixer = '';
         // this.createFloor();
         this.createSpace();
     }
 
-    update() {
-
+    update(delta) {
+        if (this.animationMixer) {
+            this.animationMixer.update(delta);
+        }
     }
 
     createSpace() {
@@ -26,6 +33,17 @@ export class SetManager {
             this.space.enableShadows = true;
             this.scene.add(this.space);
         });
+
+        gltfLoader.load(setup, gltf => {
+            this.setup = gltf.scene;
+            this.setup.position.set(0, 0, 1.5);
+            const animation = gltf.animations[0];
+            this.animationMixer = new THREE.AnimationMixer(this.setup);
+            const action = this.animationMixer.clipAction(animation);
+            action.play();
+            action.setLoop(THREE.LoopRepeat);
+            this.scene.add(this.setup);
+        })
 
     }
 

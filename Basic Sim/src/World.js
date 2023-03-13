@@ -34,7 +34,7 @@ export class World {
         // Update all subsystems.
         this.performerManager.update(delta, debug, connect, this.lightsManager);
         this.lightsManager.update();
-        this.setManager.update();
+        this.setManager.update(delta);
     }
 
     createHDRI() {
